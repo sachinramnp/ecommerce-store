@@ -1,0 +1,15 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}ShopEasy — Home{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="container hero-grid">
+        <div><span class="eyebrow">EVERYDAY ESSENTIALS</span><h1>Shop smart. Save more.</h1><p>Discover electronics, fashion, books, accessories and home essentials in one simple store.</p><a class="btn btn-primary" href="{% url 'store:product_list' %}">Shop Now</a></div>
+        <div class="hero-card"><span>Demo Offer</span><strong>Up to 25% off</strong><small>Use code WELCOME10</small></div>
+    </div>
+</section>
+<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">BROWSE</span><h2>Shop by category</h2></div><a href="{% url 'store:product_list' %}">View all</a></div><div class="category-grid">{% for category in categories %}<a class="category-card" href="{% url 'store:product_list' %}?category={{ category.id }}"><span class="category-icon">●</span><h3>{{ category.name }}</h3><p>{{ category.description|truncatechars:70 }}</p></a>{% endfor %}</div></div></section>
+<section class="section muted-bg"><div class="container"><div class="section-head"><div><span class="eyebrow">POPULAR</span><h2>Featured products</h2></div><a href="{% url 'store:product_list' %}">See all</a></div><div class="product-grid">{% for product in featured_products %}{% include 'store/includes/product_card.html' %}{% empty %}<div class="empty-state">No products yet. Run <code>python manage.py seed_data</code>.</div>{% endfor %}</div></div></section>
+<section class="section" id="offers"><div class="container offer-banner"><div><span class="eyebrow">SAVE MORE</span><h2>Campus-friendly offers</h2><p>Apply a valid coupon at checkout. Demo coupons are included in the sample data.</p></div><a class="btn btn-dark" href="{% url 'store:product_list' %}">Explore Deals</a></div></section>
+<section class="section muted-bg"><div class="container"><div class="section-head"><div><span class="eyebrow">NEW</span><h2>Latest products</h2></div></div><div class="product-grid">{% for product in latest_products %}{% include 'store/includes/product_card.html' %}{% endfor %}</div></div></section>
+{% endblock %}

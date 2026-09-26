@@ -1,0 +1,25 @@
+{% load product_images %}
+<article class="product-card">
+    <a class="product-image-wrap" href="{% url 'store:product_detail' product.pk %}">
+        {% with demo_image=product.name|product_image_url %}
+            {% if demo_image %}
+                <img class="product-image" src="{{ demo_image }}" alt="{{ product.name }}" loading="lazy">
+            {% elif product.image %}
+                <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+            {% endif %}
+        {% endwith %}
+        {% if product.discount_percent %}<span class="sale-tag">-{{ product.discount_percent }}%</span>{% endif %}
+    </a>
+    <div class="product-card-body">
+        <p class="muted product-meta">{{ product.category.name }}{% if product.brand %} · {{ product.brand }}{% endif %}</p>
+        <h3 class="product-title"><a href="{% url 'store:product_detail' product.pk %}">{{ product.name }}</a></h3>
+        <div class="rating">★ {{ product.rating }} <span>({{ product.review_count }})</span></div>
+        <div class="price-row"><span class="price">₹{{ product.current_price|floatformat:2 }}</span>{% if product.discount_percent %}<span class="old-price">₹{{ product.price|floatformat:2 }}</span>{% endif %}</div>
+        <div class="card-actions">
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'store:cart_add' product.pk %}">{% csrf_token %}<button class="btn btn-primary btn-small" type="submit" {% if not product.in_stock %}disabled{% endif %}>Add to Cart</button></form>
+            <form method="post" action="{% url 'store:wishlist_toggle' product.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}"><button class="btn btn-outline btn-small" type="submit">♡</button></form>
+            {% else %}<a class="btn btn-primary btn-small" href="{% url 'store:login' %}?next={% url 'store:product_detail' product.pk %}">Login to buy</a>{% endif %}
+        </div>
+    </div>
+</article>

@@ -1,0 +1,46 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ShopEasy{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}?v=3">
+</head>
+<body>
+<header class="site-header">
+    <div class="container nav-wrap">
+        <a class="brand" href="{% url 'store:home' %}">ShopEasy</a>
+        <button class="mobile-toggle" type="button" aria-label="Open navigation">☰</button>
+        <nav class="main-nav">
+            <a href="{% url 'store:product_list' %}">Products</a>
+            {% for c in nav_categories|slice:':5' %}<a href="{% url 'store:product_list' %}?category={{ c.id }}">{{ c.name }}</a>{% endfor %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'store:wishlist' %}">♡ Wishlist <span class="badge">{{ wishlist_count }}</span></a>
+                <a href="{% url 'store:cart' %}">🛒 Cart <span class="badge">{{ cart_count }}</span></a>
+                <a href="{% url 'store:notifications' %}">🔔 <span class="badge">{{ notification_count }}</span></a>
+                <a href="{% url 'store:profile' %}">{{ user.first_name|default:user.username }}</a>
+                {% if user.is_staff %}<a href="{% url 'store:admin_dashboard' %}">Admin</a>{% endif %}
+                <a href="{% url 'store:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'store:login' %}">Login</a>
+                <a class="btn btn-small" href="{% url 'store:register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+<main>
+    {% include 'store/includes/messages.html' %}
+    {% block content %}{% endblock %}
+</main>
+<footer class="footer">
+    <div class="container footer-grid">
+        <div><h3>ShopEasy</h3><p>Simple college-project e-commerce store built with Django.</p></div>
+        <div><h4>Quick Links</h4><a href="{% url 'store:product_list' %}">Products</a><a href="{% url 'store:home' %}#offers">Offers</a></div>
+        <div><h4>Account</h4>{% if user.is_authenticated %}<a href="{% url 'store:my_orders' %}">My Orders</a><a href="{% url 'store:addresses' %}">Addresses</a>{% else %}<a href="{% url 'store:login' %}">Login</a>{% endif %}</div>
+    </div>
+    <div class="footer-bottom">© 2026 ShopEasy · Demo project</div>
+</footer>
+<script src="{% static 'store/js/app.js' %}"></script>
+</body>
+</html>
