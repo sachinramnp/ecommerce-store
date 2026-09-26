@@ -4,7 +4,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'dev-only-change-this-secret-key'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "ecommerce-store-1161.onrender.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://ecommerce-store-1161.onrender.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -12,7 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'
     'store',
 ]
 
